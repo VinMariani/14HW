@@ -1,5 +1,4 @@
 import sqlite3
-import json
 
 
 def movie_title(title):
@@ -11,7 +10,7 @@ def movie_title(title):
                    f"LIMIT 1"
     cur = con.cursor()
     cur.execute(sqlite_query)
-    movie = cur.fetchone()
+    movie = cur.fetchall()
 
     data = {
         "title": movie[0],
@@ -29,12 +28,12 @@ def movie_year(year1, year2):
     '''поиск по году выпуска'''
     con = sqlite3.connect('netflix.db')
     sqlite_query = f"SELECT title, country, release_year, listed_in, description FROM netflix " \
-                   f"WHERE release_year BETWEEN {year1} AND {year2}" \
+                   f"WHERE release_year BETWEEN {year1} AND {year2} " \
                    f"LIMIT 100 "
     cur = con.cursor()
     cur.execute(sqlite_query)
     data = []
-    for movie in cur.fetchone():
+    for movie in cur.fetchall():
         films = {
             "title": movie[0],
             "country": movie[1],
@@ -55,7 +54,7 @@ def movie_rating(rating):
                    f"WHERE rating = {rating}"
     cur = con.cursor()
     cur.execute(sqlite_query)
-    data = cur.fetchone()
+    data = cur.fetchall()
 
     data = {
         "title": data[0],
@@ -75,7 +74,7 @@ def movie_genre(genre):
     cur = con.cursor()
     cur.execute(sqlite_query)
     data = []
-    for movie in cur.fetchone():
+    for movie in cur.fetchall():
         films = {
             "title": movie[0],
             "rating": movie[1],
@@ -113,7 +112,7 @@ def movie_category_and_year(movie_type, release_year, genre):
     cur = con.cursor()
     cur.execute(sqlite_query)
     data = []
-    for movie in cur.fetchone():
+    for movie in cur.fetchall():
         films = {
             "title": movie[0],
             "release_year": movie[1],
@@ -135,16 +134,17 @@ def movies_all():
                    "LIMIT 100 OFFSET 100"
     cur = con.cursor()
     cur.execute(sqlite_query)
-    movie = cur.fetchone()
-
-    data = {
-        "title": movie[0],
-        "rating": movie[1],
-        "country": movie[2],
-        "release_year": movie[3],
-        "genre": movie[4],
-        "description": movie[5]
-    }
+    data = []
+    for movie in cur.fetchall():
+        films = {
+            "title": movie[0],
+            "rating": movie[1],
+            "country": movie[2],
+            "release_year": movie[3],
+            "genre": movie[4],
+            "description": movie[5]
+        }
+        data.append(films)
 
     con.close()
     return data
