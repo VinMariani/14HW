@@ -129,7 +129,7 @@ def movie_category_and_year(movie_type, release_year, genre):
 def movies_all():
     '''все фильмы'''
     con = sqlite3.connect('netflix.db')
-    sqlite_query = "SELECT * FROM netflix " \
+    sqlite_query = "SELECT title, rating, country, release_year, listed_in, description FROM netflix " \
                    "ORDER BY rating ASC " \
                    "LIMIT 100 OFFSET 100"
     cur = con.cursor()
